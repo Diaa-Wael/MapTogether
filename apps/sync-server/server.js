@@ -39,6 +39,19 @@ server.on("upgrade", (request, socket, head) => {
   );
 });
 
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(
+      `Sync server cannot start: port ${PORT} is already in use. ` +
+      "Stop the other process or set PORT to a different value."
+    );
+    process.exitCode = 1;
+    return;
+  }
+
+  throw error;
+});
+
 server.listen(PORT, () => {
   console.log(
     `MapTogether sync server running on ws://localhost:${PORT}`

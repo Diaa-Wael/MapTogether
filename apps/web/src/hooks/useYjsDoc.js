@@ -4,9 +4,11 @@ import { WebsocketProvider } from "y-websocket";
 
 export function useYjsDoc(roomId) {
   const [connection, setConnection] = useState(null);
+  const [connected, setConnected] = useState(false);
 
   useEffect(() => {
     if (!roomId) {
+      setConnected(false);
       return;
     }
 
@@ -22,6 +24,12 @@ export function useYjsDoc(roomId) {
       doc
     );
 
+    const handleStatus = ({ status }) => {
+      setConnected(status === "connected");
+    };
+
+    provider.on("status", handleStatus);
+
     const awareness = provider.awareness;
 
     awareness.setLocalStateField("user", {
@@ -36,11 +44,18 @@ export function useYjsDoc(roomId) {
     });
 
     return () => {
+      provider.off("status", handleStatus);
       provider.destroy();
       doc.destroy();
+      setConnected(false);
       setConnection(null);
     };
   }, [roomId]);
 
-  return connection;
+  return connection
+    ? {
+        ...connection,
+        connected
+      }
+    : null;
 }

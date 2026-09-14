@@ -18,7 +18,7 @@ export default function App() {
 
   const yjs = useYjsDoc(roomId);
 
-  const connected = yjs?.provider?.wsconnected === true;
+  const connected = yjs?.connected === true;
 
   return (
     <div className="app">
