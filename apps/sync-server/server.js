@@ -1,24 +1,46 @@
 import http from "node:http";
-import { setupWSConnection } from "y-websocket/bin/utils.js";
 import { WebSocketServer } from "ws";
+import { setupWSConnection } from "@y/websocket-server/utils";
 
-const port = process.env.PORT || 1234;
+const PORT = process.env.PORT || 1234;
 
 const server = http.createServer((request, response) => {
-  response.writeHead(200);
-  response.end("MapTogether sync server");
+  response.writeHead(200, {
+    "Content-Type": "text/plain"
+  });
+
+  response.end("MapTogether sync server is running");
 });
 
 const wss = new WebSocketServer({
-  server
+  noServer: true
 });
 
 wss.on("connection", (ws, request) => {
+  console.log(
+    `WebSocket connection: ${request.url}`
+  );
+
   setupWSConnection(ws, request);
 });
 
-server.listen(port, () => {
+server.on("upgrade", (request, socket, head) => {
   console.log(
-    `MapTogether sync server listening on ${port}`
+    `WebSocket upgrade: ${request.url}`
+  );
+
+  wss.handleUpgrade(
+    request,
+    socket,
+    head,
+    (ws) => {
+      wss.emit("connection", ws, request);
+    }
+  );
+});
+
+server.listen(PORT, () => {
+  console.log(
+    `MapTogether sync server running on ws://localhost:${PORT}`
   );
 });

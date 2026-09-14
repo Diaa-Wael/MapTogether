@@ -3,11 +3,10 @@ import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 
 export function useYjsDoc(roomId) {
-  const [state, setState] = useState(null);
+  const [connection, setConnection] = useState(null);
 
   useEffect(() => {
     if (!roomId) {
-      setState(null);
       return;
     }
 
@@ -30,24 +29,18 @@ export function useYjsDoc(roomId) {
       name: "Anonymous"
     });
 
-    const handleUpdate = () => {
-      setState((current) => (current === null ? {} : { ...current }));
-    };
-
-    doc.on("update", handleUpdate);
-
-    setState({
+    setConnection({
       doc,
       provider,
       awareness
     });
 
     return () => {
-      doc.off("update", handleUpdate);
       provider.destroy();
       doc.destroy();
+      setConnection(null);
     };
   }, [roomId]);
 
-  return state;
+  return connection;
 }

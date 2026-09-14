@@ -1,6 +1,9 @@
+import { useState } from "react";
 import MapGL, {
   NavigationControl
 } from "react-map-gl/maplibre";
+
+import { useYjsDoc } from "./hooks/useYjsDoc";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -11,6 +14,12 @@ const INITIAL_VIEW = {
 };
 
 export default function App() {
+  const [roomId, setRoomId] = useState("demo-room");
+
+  const yjs = useYjsDoc(roomId);
+
+  const connected = yjs?.provider?.wsconnected === true;
+
   return (
     <div className="app">
       <aside className="sidebar">
@@ -20,8 +29,21 @@ export default function App() {
           Collaborative open-source mapping.
         </p>
 
+        <label>
+          Room
+        </label>
+
+        <input
+          value={roomId}
+          onChange={(event) =>
+            setRoomId(event.target.value)
+          }
+        />
+
         <div className="status">
-          🟢 Map engine online
+          {connected
+            ? "🟢 Collaboration connected"
+            : "🟡 Connecting to collaboration server..."}
         </div>
       </aside>
 
