@@ -1,0 +1,14 @@
+{
+  "name": "@maptogether/sync-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "y-websocket": "^3.0.0",
+    "yjs": "^13.6.0"
+  }
+}
