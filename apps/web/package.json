@@ -8,13 +8,13 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@maptogether/shared": "*",
+    "@maptogether/shared": "0.1.0",
+    "@supabase/supabase-js": "^2.0.0",
+    "@turf/turf": "^7.0.0",
     "maplibre-gl": "^5.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-map-gl": "^8.0.0",
-    "@supabase/supabase-js": "^2.0.0",
-    "turf": "^3.0.0",
     "y-websocket": "^3.0.0",
     "yjs": "^13.6.0"
   },
